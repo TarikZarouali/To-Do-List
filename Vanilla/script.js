@@ -20,7 +20,7 @@ function renderItemTable(filteredItems) {
             <td>${endTime}</td>
             <td>${item.status}</td>
             <td>
-                <button class="btn btn-primary btn-sm mr-2 edit-button" data-index="${index}">Edit</button>
+                <button  class="btn btn-primary btn-sm mr-2 edit-button" data-index="${index}">Edit</button>
                 <button class="btn btn-danger btn-sm delete-button" data-index="${index}">Delete</button>
             </td>
         `;
@@ -37,6 +37,12 @@ function addItem(e) {
     const status = document.getElementById('status').value;
     const duration = parseInt(document.getElementById('duration').value, 10);
     const currentTime = Math.floor(Date.now() / 1000);
+
+    if (duration <= 0) {
+        alert('Invalid duration. Please enter a duration greater than 0.');
+        return false; // Prevent form submission
+    }
+
 
     const newItem = {
         name: itemName,
