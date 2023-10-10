@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Item</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">Edit task</h1>
+
+        <!-- Form to edit item details -->
+        <form id="editItemForm">
+            <input type="hidden" id="editItemIndex">
+            <div class="form-group">
+                <label for="editItemName">Name:</label>
+                <input type="text" id="editItemName" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="editItemStatus">Status:</label>
+                <select id="editItemStatus" class="form-control" required>
+                    <option value="pending">Pending</option>
+                    <option value="doing">Doing</option>
+                    <option value="done">Done</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editItemDuration">Duration (in minutes):</label>
+                <input type="number" id="editItemDuration" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+    </div>
+    <!-- Include Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Include the JavaScript separately -->
+    <script src="edit.js"></script>
+</body>
+</html>
