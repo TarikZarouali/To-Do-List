@@ -1,0 +1,63 @@
+/* App.css */
+
+/* Style for the container */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the form */
+form {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+}
+
+/* Style for the table */
+.table {
+  background-color: #fff;
+}
+
+.table th {
+  background-color: grey;
+  color: #fff;
+}
+
+/* Style for table rows */
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Style for table buttons */
+.btn {
+  text-align: center; /* Center-align button container */
+}
+
+.btn-edit {
+  background-color: lightblue; /* Blue background for Edit button */
+  margin-right: 5px;
+}
+
+.btn-delete {
+  background-color: lightcoral; /* Red background for Delete button */
+  margin-left: 5px;
+}
+
+.btn-save {
+  background-color: green; /* Green background for Save button */
+}
+
+.btn-cancel {
+  background-color: yellow; /* Yellow background for Cancel button */
+}
