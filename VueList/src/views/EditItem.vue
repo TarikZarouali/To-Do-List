@@ -6,11 +6,22 @@
     <form @submit.prevent="editItem" class="mb-4">
       <div class="form-group">
         <label for="editName">Name:</label>
-        <input v-model="editedItem.name" type="text" id="editName" class="form-control" required>
+        <input
+          v-model="editedItem.name"
+          type="text"
+          id="editName"
+          class="form-control"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="editStatus">Status:</label>
-        <select v-model="editedItem.status" id="editStatus" class="form-control" required>
+        <select
+          v-model="editedItem.status"
+          id="editStatus"
+          class="form-control"
+          required
+        >
           <option value="pending">Pending</option>
           <option value="doing">Doing</option>
           <option value="done">Done</option>
@@ -18,9 +29,17 @@
       </div>
       <div class="form-group">
         <label for="editDuration">Duration (in minutes):</label>
-        <input v-model="editedItem.duration" type="number" id="editDuration" class="form-control" required>
+        <input
+          v-model="editedItem.duration"
+          type="number"
+          id="editDuration"
+          class="form-control"
+          required
+        />
       </div>
       <button type="submit" class="btn btn-primary">Save Changes</button>
+      <button @click="cancelEditing" class="btn btn-secondary">Cancel</button>
+      <!-- Cancel button -->
     </form>
   </div>
 </template>
@@ -38,8 +57,11 @@ export default {
   methods: {
     editItem() {
       // Emit an event with the edited item
-      this.$emit('save-changes', this.editedItem);
-      this.$router.push('/');
+      this.$emit("save-changes", this.editedItem);
+      this.$router.push("/");
+    },
+    cancelEditing() {
+      this.$router.push("/"); // Redirect to the main page without saving changes
     },
   },
 };
@@ -68,6 +90,19 @@ h1 {
 
 .btn-primary {
   background-color: #007bff;
+  height: 30px;
+  width: 100px;
+  border-radius: 25px;
+  color: #fff;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  height: 30px;
+  width: 80px;
+  border-radius: 25px;
+  margin-left: 1em;
   color: #fff;
   border: none;
 }
