@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To-Do-List</title>
+    <title>To-Do List</title>
 
     <!-- Include Bootstrap CSS -->
     <link
@@ -18,6 +18,9 @@
     <div class="container mt-4">
       <h1 class="text-center">To-do list</h1>
 
+      <button class="btn btn-success" onclick="exportToCSV()">
+        Export to CSV
+      </button>
       <!-- Form to add a new item -->
       <form id="addItemForm">
         <div class="form-group">
@@ -35,6 +38,10 @@
         <div class="form-group">
           <label for="duration">Duration (in minutes):</label>
           <input type="number" id="duration" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label for="location">Location:</label>
+          <input type="text" id="location" class="form-control" />
         </div>
         <button
           style="border-radius: 20px; height: 3rem; width: 12rem"
@@ -56,13 +63,15 @@
         </select>
       </div>
     </div>
+
     <!-- Table to display items -->
     <div class="container mt-3 text-center">
       <table class="table">
         <thead>
           <tr>
             <th>Name</th>
-            <th>Task</th>
+            <th>Duration</th>
+            <th>Location</th>
             <th>Start Time</th>
             <th>End Time</th>
             <th>Status</th>
@@ -135,8 +144,51 @@
             >
               Close
             </button>
-            <button type="submit" form="editItemForm" class="btn btn-success">
+            <button
+              type="button"
+              id="editItemSaveButton"
+              class="btn btn-success"
+            >
               Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Location Modal -->
+    <div
+      class="modal fade"
+      id="viewLocationModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="viewLocationModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewLocationModalLabel">Location</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="mapContainer">
+            <!-- Location map will be displayed here -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              id="closeViewLocationModalButton"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
             </button>
           </div>
         </div>
@@ -147,6 +199,8 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 
     <!-- Include the JavaScript separately -->
     <script src="script.js"></script>

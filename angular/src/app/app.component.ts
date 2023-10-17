@@ -9,12 +9,11 @@ export class AppComponent implements OnInit {
   newItemName: string = '';
   newItemStatus: string = 'pending';
   newItemDuration: number = 0;
+  newItemLocation: string = '';
+  items: any[] = [];
   selectedStatusFilter: string = 'all';
 
-  items: any[] = [];
-
   ngOnInit() {
-    // Load items from localStorage if available
     const storedItems = localStorage.getItem('items');
     if (storedItems) {
       this.items = JSON.parse(storedItems);
@@ -24,23 +23,58 @@ export class AppComponent implements OnInit {
   addItem() {
     const newItem = {
       name: this.newItemName,
-      task: this.newItemStatus,
+      status: this.newItemStatus,
       startTime: new Date(),
       endTime: new Date(),
       duration: this.newItemDuration,
-      status: this.newItemStatus,
+      location: this.newItemLocation,
       isEditing: false,
     };
 
     this.items.push(newItem);
 
-    // Reset form fields
     this.newItemName = '';
     this.newItemStatus = 'pending';
     this.newItemDuration = 0;
+    this.newItemLocation = '';
 
-    // Save items to localStorage
     localStorage.setItem('items', JSON.stringify(this.items));
+  }
+
+  viewLocationOnMap(location: string) {
+    // You can use the Google Maps API for this purpose
+    window.open(`https://maps.google.com/maps?q=${location}&output=embed`);
+  }
+
+  exportToCSV() {
+    const csvData = this.convertItemsToCSV(this.items);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'items.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  convertItemsToCSV(items: any[]): string {
+    const header = [
+      'Name',
+      'Status',
+      'Start Time',
+      'End Time',
+      'Duration',
+      'Location',
+    ];
+    const rows = items.map((item) => [
+      item.name,
+      item.status,
+      item.startTime,
+      item.endTime,
+      item.duration,
+      item.location,
+    ]);
+    return [header, ...rows].map((e) => e.join(',')).join('\n');
   }
 
   editItem(index: number) {
@@ -49,8 +83,6 @@ export class AppComponent implements OnInit {
 
   updateItem(index: number) {
     this.items[index].isEditing = false;
-
-    // Save items to localStorage
     localStorage.setItem('items', JSON.stringify(this.items));
   }
 
@@ -60,8 +92,6 @@ export class AppComponent implements OnInit {
 
   deleteItem(index: number) {
     this.items.splice(index, 1);
-
-    // Save items to localStorage
     localStorage.setItem('items', JSON.stringify(this.items));
   }
 

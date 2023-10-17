@@ -6,14 +6,17 @@ function App() {
   const [itemName, setItemName] = useState("");
   const [status, setStatus] = useState("pending");
   const [duration, setDuration] = useState("");
+  const [location, setLocation] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [editingIndex, setEditingIndex] = useState(-1); // Track the editing index
-  const [editItemName, setEditItemName] = useState(""); // Edit form fields
+  const [editingIndex, setEditingIndex] = useState(-1);
+  const [editItemName, setEditItemName] = useState("");
   const [editStatus, setEditStatus] = useState("");
   const [editDuration, setEditDuration] = useState("");
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("");
+
   useEffect(() => {
-    // Load existing items from localStorage when the component mounts
     const storedItems = JSON.parse(localStorage.getItem("items"));
     if (storedItems) {
       setItems(storedItems);
@@ -28,7 +31,7 @@ function App() {
     e.preventDefault();
     const currentTime = new Date().toLocaleString();
     const endTime = new Date(
-      new Date(currentTime).getTime() + duration * 60000 // Convert minutes to milliseconds
+      new Date(currentTime).getTime() + duration * 60000
     ).toLocaleString();
 
     const newItem = {
@@ -37,6 +40,7 @@ function App() {
       duration: duration,
       startTime: currentTime,
       endTime: endTime,
+      location: location,
     };
 
     setItems([...items, newItem]);
@@ -55,6 +59,7 @@ function App() {
     setItemName("");
     setStatus("pending");
     setDuration("");
+    setLocation("");
   };
 
   const filterItemsByStatus = (status) => {
@@ -76,6 +81,12 @@ function App() {
             <td>{item.status}</td>
             <td>
               <button
+                className="btn btn-view-location btn-lg"
+                onClick={() => viewLocation(item.location)}
+              >
+                View Location
+              </button>
+              <button
                 className="btn btn-edit btn-lg"
                 onClick={() => editItem(index)}
               >
@@ -90,7 +101,7 @@ function App() {
             </td>
           </tr>
         ))}
-        {editingIndex !== -1 && ( // Render edit form conditionally
+        {editingIndex !== -1 && (
           <tr>
             <td>
               <input
@@ -136,8 +147,36 @@ function App() {
     );
   };
 
+  const viewLocation = (location) => {
+    setSelectedLocation(location);
+    setModalOpen(true);
+  };
+
+  const closeLocationModal = () => {
+    setModalOpen(false);
+    setSelectedLocation("");
+  };
+
+  const exportToCSV = () => {
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      "Name,Duration,Start Time,End Time,Status,Location\n" +
+      items
+        .map(
+          (item) =>
+            `${item.name},${item.duration},${item.startTime},${item.endTime},${item.status},"${item.location}"`
+        )
+        .join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "task_data.csv");
+    document.body.appendChild(link); // Required for FF
+    link.click();
+  };
+
   const editItem = (index) => {
-    // Set the editing state and populate the edit form with the item's data
     setEditingIndex(index);
     const itemToEdit = items[index];
     setEditItemName(itemToEdit.name);
@@ -146,7 +185,6 @@ function App() {
   };
 
   const saveEditedItem = () => {
-    // Save the edited item and reset the editing state
     const updatedItems = [...items];
     const editedItem = {
       name: editItemName,
@@ -154,6 +192,7 @@ function App() {
       duration: editDuration,
       startTime: items[editingIndex].startTime,
       endTime: items[editingIndex].endTime,
+      location: items[editingIndex].location,
     };
     updatedItems[editingIndex] = editedItem;
     setItems(updatedItems);
@@ -169,7 +208,6 @@ function App() {
   };
 
   const cancelEdit = () => {
-    // Cancel editing and reset the editing state
     setEditingIndex(-1);
     clearEditForm();
   };
@@ -215,6 +253,16 @@ function App() {
             required
           />
         </div>
+        <div className="form-group">
+          <label htmlFor="location">Location:</label>
+          <input
+            type="text"
+            id="location"
+            className="form-control"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+        </div>
         <button type="submit" className="btn btn-primary">
           Add Item
         </button>
@@ -235,6 +283,10 @@ function App() {
         </select>
       </div>
 
+      <button className="btn btn-export-csv mt-3" onClick={exportToCSV}>
+        Export to CSV
+      </button>
+
       <div className="container mt-3 text-center">
         <table className="table">
           <thead>
@@ -244,12 +296,30 @@ function App() {
               <th>Start Time</th>
               <th>End Time</th>
               <th>Status</th>
+              <th>Location</th>
               <th>Action</th>
             </tr>
           </thead>
           {renderItems(filterItemsByStatus(statusFilter))}
         </table>
       </div>
+
+      {modalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeLocationModal}>
+              &times;
+            </span>
+            <iframe
+              title="Location Map"
+              width="600"
+              height="450"
+              frameBorder="0"
+              src={`https://maps.google.com/maps?q=${selectedLocation}&output=embed`}
+            ></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
