@@ -8,7 +8,6 @@ function renderItemTable(filteredItems) {
 
   (filteredItems || items).forEach((item, index) => {
     const row = document.createElement("tr");
-
     // Display item details with readable dates
     const startTime = new Date(item.startTime * 1000).toLocaleString();
     const endTime = new Date(item.endTime * 1000).toLocaleString();
@@ -17,14 +16,14 @@ function renderItemTable(filteredItems) {
       <td>${item.name}</td>
       <td>${item.duration} minutes</td>
       <td>
-        <button class="btn btn-primary btn-sm" onclick="viewLocation(${index})" data-toggle="modal" data-target="#viewLocationModal">View Location</button>
+        <button onclick="viewLocation(${index})">View Location</button>
       </td>
       <td>${startTime}</td>
       <td>${endTime}</td>
       <td>${item.status}</td>
       <td>
-        <button class="btn btn-primary btn-sm mr-2" onclick="editItem(${index})" data-toggle="modal" data-target="#editItemModal">Edit</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteItem(${index})">Delete</button>
+        <button onclick="editItem(${index})">Edit</button>
+        <button onclick="deleteItem(${index})">Delete</button>
       </td>
     `;
 
@@ -94,19 +93,42 @@ function updateTableByStatus() {
 }
 
 // Add an event listener to the status filter dropdown
-document
-  .getElementById("statusFilter")
-  .addEventListener("change", updateTableByStatus);
+const statusFilter = document.getElementById("statusFilter");
+if (statusFilter) {
+  statusFilter.addEventListener("change", updateTableByStatus);
+}
 
 // Function to edit an item
 function editItem(index) {
   const editItem = items[index];
-  document.getElementById("editItemIndex").value = index;
-  document.getElementById("editItemName").value = editItem.name;
-  document.getElementById("editItemStatus").value = editItem.status;
-  document.getElementById("editItemDuration").value = editItem.duration;
+  const editItemIndexElement = document.getElementById("editItemIndex");
+  const editItemNameElement = document.getElementById("editItemName");
+  const editItemStatusElement = document.getElementById("editItemStatus");
+  const editItemDurationElement = document.getElementById("editItemDuration");
+  const editItemModal = document.getElementById("editItemModal");
+
+  if (
+    editItemIndexElement &&
+    editItemNameElement &&
+    editItemStatusElement &&
+    editItemDurationElement
+  ) {
+    editItemIndexElement.value = index;
+    editItemNameElement.value = editItem.name;
+    editItemStatusElement.value = editItem.status;
+    editItemDurationElement.value = editItem.duration;
+
+    // Display the edit modal
+    editItemModal.style.display = "block";
+  } else {
+    alert("One or more edit form elements not found.");
+  }
 }
 
+// Function to close the edit item modal
+function closeEditItemModal() {
+  document.getElementById("editItemModal").style.display = "none";
+}
 // Function to save the edited item
 function saveEditedItem() {
   const index = document.getElementById("editItemIndex").value;
@@ -134,16 +156,17 @@ function saveEditedItem() {
   localStorage.setItem("items", JSON.stringify(items));
 
   // Close the edit modal
-  $("#editItemModal").modal("hide");
+  document.getElementById("editItemModal").style.display = "none";
 
   // Refresh the table
   renderItemTable();
 }
 
 // Add an event listener to the edit modal save button
-document
-  .getElementById("editItemSaveButton")
-  .addEventListener("click", saveEditedItem);
+const editItemSaveButton = document.getElementById("editItemSaveButton");
+if (editItemSaveButton) {
+  editItemSaveButton.addEventListener("click", saveEditedItem);
+}
 
 // Function to start the confetti effect
 function startConfetti() {
@@ -193,18 +216,24 @@ function viewLocation(index) {
   ></iframe>`;
 
   // Show the viewLocationModal
-  $("#viewLocationModal").modal("show");
+  document.getElementById("viewLocationModal").style.display = "block";
 }
 
 // Close the view location modal
 function closeViewLocationModal() {
-  $("#viewLocationModal").modal("hide");
+  document.getElementById("viewLocationModal").style.display = "none";
 }
 
 // Add an event listener to the close button in the view location modal
-document
-  .getElementById("closeViewLocationModalButton")
-  .addEventListener("click", closeViewLocationModal);
+const closeViewLocationModalButton = document.getElementById(
+  "closeViewLocationModalButton"
+);
+if (closeViewLocationModalButton) {
+  closeViewLocationModalButton.addEventListener(
+    "click",
+    closeViewLocationModal
+  );
+}
 
 // Function to delete an item
 function deleteItem(index) {
@@ -220,9 +249,12 @@ function deleteItem(index) {
 }
 
 // Add an event listener to the form for adding a new item
-document.getElementById("addItemForm").addEventListener("submit", function (e) {
-  addItem(e);
-});
+const addItemForm = document.getElementById("addItemForm");
+if (addItemForm) {
+  addItemForm.addEventListener("submit", function (e) {
+    addItem(e);
+  });
+}
 
 // Initialize the item table on page load with all items and make it sortable
 document.addEventListener("DOMContentLoaded", function () {
@@ -258,6 +290,11 @@ function formatDate(date) {
   return new Date(date * 1000).toLocaleString(undefined, options);
 }
 
+// Add an event listener to the "Export to CSV" button
+const exportButton = document.getElementById("exportButton");
+if (exportButton) {
+  exportButton.addEventListener("click", exportToCSV);
+}
 function exportToCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
 

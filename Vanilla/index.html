@@ -4,32 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To-Do List</title>
-
-    <!-- Include Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-
     <link rel="stylesheet" href="style.css" />
+    <!-- Make sure to link to your CSS file -->
   </head>
-
   <body>
-    <div class="container mt-4">
-      <h1 class="text-center">To-do list</h1>
-
-      <button class="btn btn-success" onclick="exportToCSV()">
-        Export to CSV
-      </button>
-      <!-- Form to add a new item -->
+    <div class="container">
+      <h1>To-Do List</h1>
+      <button id="exportButton">Export to CSV</button>
       <form id="addItemForm">
         <div class="form-group">
           <label for="itemName">Name:</label>
-          <input type="text" id="itemName" class="form-control" required />
+          <input type="text" id="itemName" required />
         </div>
         <div class="form-group">
           <label for="status">Status:</label>
-          <select id="status" class="form-control" required>
+          <select id="status" required>
             <option value="pending">Pending</option>
             <option value="doing">Doing</option>
             <option value="done">Done</option>
@@ -37,25 +26,17 @@
         </div>
         <div class="form-group">
           <label for="duration">Duration (in minutes):</label>
-          <input type="number" id="duration" class="form-control" required />
+          <input type="number" id="duration" required />
         </div>
         <div class="form-group">
           <label for="location">Location:</label>
-          <input type="text" id="location" class="form-control" />
+          <input type="text" id="location" />
         </div>
-        <button
-          style="border-radius: 20px; height: 3rem; width: 12rem"
-          type="submit"
-          class="btn btn-primary"
-        >
-          Add Item
-        </button>
+        <button type="submit">Add Item</button>
       </form>
-
-      <!-- Filter items by status -->
-      <div class="mt-3">
+      <div class="filter-status">
         <label for="statusFilter">Filter by Status:</label>
-        <select id="statusFilter" class="form-control">
+        <select id="statusFilter">
           <option value="all">All</option>
           <option value="pending">Pending</option>
           <option value="doing">Doing</option>
@@ -63,146 +44,66 @@
         </select>
       </div>
     </div>
-
-    <!-- Table to display items -->
-    <div class="container mt-3 text-center">
-      <table class="table">
+    <div class="container">
+      <table>
         <thead>
           <tr>
             <th>Name</th>
             <th>Duration</th>
-            <th>Location</th>
+            <th>View Location</th>
             <th>Start Time</th>
             <th>End Time</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="itemTableBody"></tbody>
       </table>
     </div>
-
-    <!-- Edit Item Modal -->
-    <div
-      class="modal fade"
-      id="editItemModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="editItemModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="editItemModalLabel">Edit Task</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <!-- Form to edit item details -->
-            <form id="editItemForm">
-              <input type="hidden" id="editItemIndex" />
-              <div class="form-group">
-                <label for="editItemName">Name:</label>
-                <input
-                  type="text"
-                  id="editItemName"
-                  class="form-control"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="editItemStatus">Status:</label>
-                <select id="editItemStatus" class="form-control" required>
-                  <option value="pending">Pending</option>
-                  <option value="doing">Doing</option>
-                  <option value="done">Done</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="editItemDuration">Duration (in minutes):</label>
-                <input
-                  type="number"
-                  id="editItemDuration"
-                  class="form-control"
-                  required
-                />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              id="editItemSaveButton"
-              class="btn btn-success"
-            >
-              Save
-            </button>
-          </div>
+    <!-- Custom Edit Modal -->
+    <div id="editItemModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span
+          id="closeEditItemModalButton"
+          class="close"
+          onclick="closeEditItemModal()"
+          >&times;</span
+        >
+        <input type="hidden" id="editItemIndex" />
+        <div class="form-group">
+          <label for="editItemName">Name:</label>
+          <input type="text" id="editItemName" required />
         </div>
+        <div class="form-group">
+          <label for="editItemStatus">Status:</label>
+          <select id="editItemStatus" required>
+            <option value="pending">Pending</option>
+            <option value="doing">Doing</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editItemDuration">Duration (in minutes):</label>
+          <input type="number" id="editItemDuration" required />
+        </div>
+        <button id="editItemSaveButton" onclick="saveEditedItem()">
+          Save Changes
+        </button>
       </div>
     </div>
-
-    <!-- View Location Modal -->
-    <div
-      class="modal fade"
-      id="viewLocationModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="viewLocationModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="viewLocationModalLabel">Location</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body" id="mapContainer">
-            <!-- Location map will be displayed here -->
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              id="closeViewLocationModalButton"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+    <!-- Custom View Location Modal -->
+    <div id="viewLocationModal" class="modal">
+      <div class="modal-content">
+        <span
+          id="closeViewLocationModalButton"
+          class="close"
+          onclick="closeViewLocationModal()"
+          >&times;</span
+        >
+        <div id="mapContainer"></div>
       </div>
     </div>
-
-    <!-- Include Bootstrap JS (optional) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-
-    <!-- Include the JavaScript separately -->
+    <script src="Sortable.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

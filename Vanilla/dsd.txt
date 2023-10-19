@@ -1,0 +1,24 @@
+// const closeModalButton = document.querySelector(".js-close-modal-btn");
+
+//class="js-edit-modal js-modal"
+
+// const locationModal = document.querySelector(".js-location-modal");
+// const editModal = document.querySelector(".js-edit-modal");
+// const createModal = document.querySelector(".js-create-modal");
+// const allModal = document.querySelectorAll(".js-modal");
+
+//controlModal('close', 'all')
+
+// allModal.forEach((model) => {
+//     model.classList.add("hide");
+// });
+function controlModal(action, scope, id = null) {
+  
+  if (action == 'open') {
+
+  }
+  else if(action == 'close') {
+
+  }
+  
+}
