@@ -10,15 +10,15 @@
   <body>
     <div class="container">
       <h1>To-Do List</h1>
-      <button id="exportButton">Export to CSV</button>
-      <form id="addItemForm">
+      <button class="js-exportButton">Export to CSV</button>
+      <form class="js-addItemForm">
         <div class="form-group">
           <label for="itemName">Name:</label>
-          <input type="text" id="itemName" required />
+          <input type="text" class="js-itemName" required />
         </div>
         <div class="form-group">
           <label for="status">Status:</label>
-          <select id="status" required>
+          <select class="js-status" required>
             <option value="pending">Pending</option>
             <option value="doing">Doing</option>
             <option value="done">Done</option>
@@ -26,17 +26,17 @@
         </div>
         <div class="form-group">
           <label for="duration">Duration (in minutes):</label>
-          <input type="number" id="duration" required />
+          <input type="number" class="js-duration" required />
         </div>
         <div class="form-group">
           <label for="location">Location:</label>
-          <input type="text" id="location" />
+          <input type="text" class="js-location" />
         </div>
         <button type="submit">Add Item</button>
       </form>
       <div class="filter-status">
         <label for="statusFilter">Filter by Status:</label>
-        <select id="statusFilter">
+        <select class="js-statusFilter">
           <option value="all">All</option>
           <option value="pending">Pending</option>
           <option value="doing">Doing</option>
@@ -57,26 +57,23 @@
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="itemTableBody"></tbody>
+        <tbody class="js-itemTableBody"></tbody>
       </table>
     </div>
     <!-- Custom Edit Modal -->
-    <div id="editItemModal" class="modal" style="display: none">
+    <div class="modal js-editItemModal" style="display: none">
       <div class="modal-content">
-        <span
-          id="closeEditItemModalButton"
-          class="close"
-          onclick="closeEditItemModal()"
+        <span class="close js-editModalClose" onclick="closeEditItemModal()"
           >&times;</span
         >
-        <input type="hidden" id="editItemIndex" />
+        <input type="hidden" class="js-editItemIndex" />
         <div class="form-group">
           <label for="editItemName">Name:</label>
-          <input type="text" id="editItemName" required />
+          <input type="text" class="js-editItemName" required />
         </div>
         <div class="form-group">
           <label for="editItemStatus">Status:</label>
-          <select id="editItemStatus" required>
+          <select class="js-editItemStatus" required>
             <option value="pending">Pending</option>
             <option value="doing">Doing</option>
             <option value="done">Done</option>
@@ -84,23 +81,20 @@
         </div>
         <div class="form-group">
           <label for="editItemDuration">Duration (in minutes):</label>
-          <input type="number" id="editItemDuration" required />
+          <input type="number" class="js-editItemDuration" required />
         </div>
-        <button id="editItemSaveButton" onclick="saveEditedItem()">
+        <button class="js-editItemSaveButton" onclick="saveEditedItem()">
           Save Changes
         </button>
       </div>
     </div>
     <!-- Custom View Location Modal -->
-    <div id="viewLocationModal" class="modal">
+    <div class="modal js-viewLocationModal">
       <div class="modal-content">
-        <span
-          id="closeViewLocationModalButton"
-          class="close"
-          onclick="closeViewLocationModal()"
+        <span class="close js-viewModalClose" onclick="closeViewLocationModal()"
           >&times;</span
         >
-        <div id="mapContainer"></div>
+        <div class="js-mapContainer"></div>
       </div>
     </div>
     <script src="Sortable.min.js"></script>

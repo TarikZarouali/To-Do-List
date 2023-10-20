@@ -3,7 +3,7 @@ let items = JSON.parse(localStorage.getItem("items")) || [];
 
 // Function to render the item table
 function renderItemTable(filteredItems) {
-  const itemTableBody = document.getElementById("itemTableBody");
+  const itemTableBody = document.querySelector(".js-itemTableBody");
   itemTableBody.innerHTML = "";
 
   (filteredItems || items).forEach((item, index) => {
@@ -35,10 +35,10 @@ function renderItemTable(filteredItems) {
 function addItem(e) {
   e.preventDefault(); // Prevent form submission
 
-  const itemName = document.getElementById("itemName").value;
-  const status = document.getElementById("status").value;
-  const duration = parseInt(document.getElementById("duration").value, 10);
-  const location = document.getElementById("location").value;
+  const itemName = document.querySelector(".js-itemName").value;
+  const status = document.querySelector(".js-status").value;
+  const duration = parseInt(document.querySelector(".js-duration").value, 10);
+  const location = document.querySelector(".js-location").value;
   const currentTime = Math.floor(Date.now() / 1000);
 
   if (duration <= 0) {
@@ -67,10 +67,10 @@ function addItem(e) {
 
 // Function to clear the form
 function clearForm() {
-  document.getElementById("itemName").value = "";
-  document.getElementById("status").value = "pending";
-  document.getElementById("duration").value = "";
-  document.getElementById("location").value = "";
+  document.querySelector(".js-itemName").value = "";
+  document.querySelector(".js-status").value = "pending";
+  document.querySelector(".js-duration").value = "";
+  document.querySelector(".js-location").value = "";
 }
 
 // Initialize the item table on page load with all items
@@ -85,7 +85,7 @@ function filterItemsByStatus(status) {
 
 // Function to update the table based on the selected status
 function updateTableByStatus() {
-  const statusFilter = document.getElementById("statusFilter");
+  const statusFilter = document.querySelector(".js-statusFilter");
   const selectedStatus = statusFilter.value;
 
   const filteredItems = filterItemsByStatus(selectedStatus);
@@ -93,7 +93,7 @@ function updateTableByStatus() {
 }
 
 // Add an event listener to the status filter dropdown
-const statusFilter = document.getElementById("statusFilter");
+const statusFilter = document.querySelector(".js-statusFilter");
 if (statusFilter) {
   statusFilter.addEventListener("change", updateTableByStatus);
 }
@@ -101,11 +101,13 @@ if (statusFilter) {
 // Function to edit an item
 function editItem(index) {
   const editItem = items[index];
-  const editItemIndexElement = document.getElementById("editItemIndex");
-  const editItemNameElement = document.getElementById("editItemName");
-  const editItemStatusElement = document.getElementById("editItemStatus");
-  const editItemDurationElement = document.getElementById("editItemDuration");
-  const editItemModal = document.getElementById("editItemModal");
+  const editItemIndexElement = document.querySelector(".js-editItemIndex");
+  const editItemNameElement = document.querySelector(".js-editItemName");
+  const editItemStatusElement = document.querySelector(".js-editItemStatus");
+  const editItemDurationElement = document.querySelector(
+    ".js-editItemDuration"
+  );
+  const editItemModal = document.querySelector(".js-editItemModal");
 
   if (
     editItemIndexElement &&
@@ -127,15 +129,16 @@ function editItem(index) {
 
 // Function to close the edit item modal
 function closeEditItemModal() {
-  document.getElementById("editItemModal").style.display = "none";
+  document.querySelector(".js-editItemModal").style.display = "none";
 }
+
 // Function to save the edited item
 function saveEditedItem() {
-  const index = document.getElementById("editItemIndex").value;
-  const editItemName = document.getElementById("editItemName").value;
-  const editItemStatus = document.getElementById("editItemStatus").value;
+  const index = document.querySelector(".js-editItemIndex").value;
+  const editItemName = document.querySelector(".js-editItemName").value;
+  const editItemStatus = document.querySelector(".js-editItemStatus").value;
   const editItemDuration = parseInt(
-    document.getElementById("editItemDuration").value,
+    document.querySelector(".js-editItemDuration").value,
     10
   );
 
@@ -156,38 +159,16 @@ function saveEditedItem() {
   localStorage.setItem("items", JSON.stringify(items));
 
   // Close the edit modal
-  document.getElementById("editItemModal").style.display = "none";
+  document.querySelector(".js-editItemModal").style.display = "none";
 
   // Refresh the table
   renderItemTable();
 }
 
 // Add an event listener to the edit modal save button
-const editItemSaveButton = document.getElementById("editItemSaveButton");
+const editItemSaveButton = document.querySelector(".js-editItemSaveButton");
 if (editItemSaveButton) {
   editItemSaveButton.addEventListener("click", saveEditedItem);
-}
-
-// Function to start the confetti effect
-function startConfetti() {
-  // Configuration for the confetti effect
-  const config = {
-    spread: 180,
-    startVelocity: 55,
-    elementCount: 50,
-    decay: 0.92,
-  };
-
-  // Create a confetti object with the specified configuration
-  const confetti = new ConfettiGenerator(config);
-
-  // Append the confetti element to the body
-  confetti.render();
-
-  // Automatically stop the confetti after a few seconds (you can adjust the duration)
-  setTimeout(() => {
-    confetti.clear();
-  }, 5000); // Stop the confetti after 5 seconds
 }
 
 // Function to view the location on the map
@@ -204,7 +185,7 @@ function viewLocation(index) {
   // The code for this part depends on the mapping service you are using.
   // You can replace the following placeholder code with your map integration code.
   // For example, if you are using Google Maps, you would replace the map placeholder below with your Google Maps code.
-  const mapPlaceholder = document.getElementById("mapContainer");
+  const mapPlaceholder = document.querySelector(".js-mapContainer");
   mapPlaceholder.innerHTML = `<iframe
     width="100%"
     height="100%"
@@ -216,18 +197,17 @@ function viewLocation(index) {
   ></iframe>`;
 
   // Show the viewLocationModal
-  document.getElementById("viewLocationModal").style.display = "block";
+  document.querySelector(".js-viewLocationModal").style.display = "block";
 }
 
 // Close the view location modal
 function closeViewLocationModal() {
-  document.getElementById("viewLocationModal").style.display = "none";
+  document.querySelector(".js-viewLocationModal").style.display = "none";
 }
 
 // Add an event listener to the close button in the view location modal
-const closeViewLocationModalButton = document.getElementById(
-  "closeViewLocationModalButton"
-);
+const closeViewLocationModalButton =
+  document.querySelector(".js-viewModalClose");
 if (closeViewLocationModalButton) {
   closeViewLocationModalButton.addEventListener(
     "click",
@@ -249,7 +229,7 @@ function deleteItem(index) {
 }
 
 // Add an event listener to the form for adding a new item
-const addItemForm = document.getElementById("addItemForm");
+const addItemForm = document.querySelector(".js-addItemForm");
 if (addItemForm) {
   addItemForm.addEventListener("submit", function (e) {
     addItem(e);
@@ -264,9 +244,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Initialize Sortable.js for the table body
 function initializeSortable() {
-  const itemTableBody = document.getElementById("itemTableBody");
+  const itemTableBody = document.querySelector(".js-itemTableBody");
   const sortable = new Sortable(itemTableBody, {
-    animation: 150, // Adjust the animation speed as needed
+    animation: 500, // Adjust the animation speed as needed
     onEnd: function (evt) {
       // Handle item reordering here
       const movedItem = items.splice(evt.oldIndex, 1)[0];
@@ -291,10 +271,11 @@ function formatDate(date) {
 }
 
 // Add an event listener to the "Export to CSV" button
-const exportButton = document.getElementById("exportButton");
+const exportButton = document.querySelector(".js-exportButton");
 if (exportButton) {
   exportButton.addEventListener("click", exportToCSV);
 }
+
 function exportToCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
 
